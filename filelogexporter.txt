@@ -1,0 +1,57 @@
+Documentação do FileLogExporter
+Visão geral
+
+FileLogExporter é um exportador de log personalizado projetado para uso com o OpenTelemetry C++ SDK. Ele facilita o registro em arquivos de texto com foco na simplicidade e facilidade de uso, suportando a rotação diária de registros para organizar os registros de forma eficiente ao longo do tempo. Este exportador complementa o módulo CoreLog, fornecendo uma experiência de registro contínua que aproveita os recursos de registro estruturado do OpenTelemetry.
+
+Como funciona
+
+FileLogExporter gera automaticamente arquivos de log diariamente, nomeando-os com um prefixo baseado na data atual (AAAA-MM-DD), seguido por um nome de arquivo base definido pelo usuário. Isso garante que os logs sejam mantidos organizados e facilmente gerenciáveis ao longo do tempo. O exportador grava registros de log recebidos no arquivo do dia atual, gerenciando a criação e rotação de arquivos internamente.
+
+
+Integração com CoreLog
+
+FileLogExporter trabalha em conjunto com CoreLog para fornecer uma solução de log unificada. Enquanto o CoreLog serve como interface primária para a emissão de mensagens de log de dentro do aplicativo, o FileLogExporter é responsável por exportar essas mensagens para armazenamento persistente (neste caso, arquivos de texto). CoreLog abstrai as complexidades da API de registro OpenTelemetry, permitindo que os desenvolvedores se concentrem no registro de mensagens significativas, enquanto o FileLogExporter garante que essas mensagens sejam armazenadas e organizadas de forma confiável.
+Uso
+
+Para usar o FileLogExporter em seu aplicativo, siga estas etapas:
+Inicialização
+
+1 - Incluir o cabeçalho: primeiro, inclua o cabeçalho FileLogExporter no código de inicialização do seu aplicativo.
+'''
+#include "FileLogExporter.h"
+'''
+
+2 - Crie e configure o exportador: instancie FileLogExporter com o nome de arquivo base para seus logs. Este nome de arquivo base será usado em conjunto com a data atual para gerar arquivos de log diários.
+
+'''
+auto fileLogExporter = std::make_shared<FileLogExporter>("my_app_log");
+'''
+
+3 - Configurar o log do OpenTelemetry: Configure o sistema de log do OpenTelemetry para usar o FileLogExporter. Isso normalmente envolve a criação de um processador de log (simples ou em lote) que usa o exportador e a configuração desse processador no provedor do criador de logs.
+
+'''
+auto processor = std::make_shared<opentelemetry::sdk::logs::SimpleLogProcessor>(fileLogExporter);
+auto provider = std::make_shared<opentelemetry::sdk::logs::LoggerProvider>();
+provider->AddProcessor(processor);
+opentelemetry::logs::Provider::SetLoggerProvider(provider);
+'''
+
+Emitindo registros
+
+Com o FileLogExporter configurado, use o CoreLog para emitir mensagens de log normalmente. FileLogExporter cuidará automaticamente do armazenamento dessas mensagens no arquivo de log diário apropriado.
+
+'''
+CoreLog::info("Application started successfully.");
+'''
+
+Rotação diária de registros
+
+FileLogExporter gerencia a rotação de logs internamente, criando um novo arquivo de log todos os dias com base na data atual. Isso garante que os arquivos de log permaneçam em tamanho gerenciável e sejam organizados de uma forma que facilita a revisão e análise de log.
+
+Personalização e Configuração
+
+Embora o FileLogExporter tenha como objetivo fornecer padrões sensatos para o gerenciamento de arquivos de log, você pode estender ou modificar seu comportamento para melhor atender às suas necessidades específicas. As personalizações potenciais incluem a alteração da convenção de nomenclatura do arquivo de log, a modificação da estratégia de rotação (por exemplo, com base no tamanho do arquivo ou em intervalos de tempo diferentes de diários) ou a adição de compactação e arquivamento de arquivos de log antigos.
+
+Conclusão
+
+FileLogExporter oferece uma solução simples para registro baseado em arquivo com OpenTelemetry C++, enfatizando facilidade de uso, rotação diária de log e integração perfeita com CoreLog. Seguindo as etapas descritas acima, você pode incorporar rapidamente o FileLogExporter ao seu aplicativo, garantindo que seus logs sejam bem organizados, persistentes e fáceis de acessar.
