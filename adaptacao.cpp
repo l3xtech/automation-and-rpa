@@ -12,6 +12,8 @@ std::string Log4Data::constructStructuredMessage(const std::string& type, const 
 }
 
 
+// use de know structure
+
 void Log4Data::logInformation(const logDataInput& value) {
     std::stringstream ss;
     ss << "LMESSAGE_ID=" << value._message_id << "|"
