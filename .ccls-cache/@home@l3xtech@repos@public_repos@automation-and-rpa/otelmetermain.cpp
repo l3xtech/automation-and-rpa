@@ -5,22 +5,6 @@
 #include <opentelemetry/sdk/resources/resource.h>
 #include <opentelemetry/sdk/common/global_provider.h>
 
-
-
-
-
-#include "opentelemetry/exporters/ostream/metrics_exporter_factory.h"
-#include "opentelemetry/sdk/metrics/meter_provider.h"
-#include "opentelemetry/sdk/metrics/meter_provider_factory.h"
-#include "opentelemetry/metrics/provider.h"
-
-
-
-
-
-
-
-
 using namespace opentelemetry::sdk::metrics;
 using namespace opentelemetry::sdk::trace;
 
