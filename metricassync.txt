@@ -1,0 +1,26 @@
+Counter
+	Contador monotônico, pode ser somente acrescentado.
+	  - Requisições efetuadas
+	  - Requisições recebidas
+	  - Quantidade de bytes recebidos
+	  - Número de contas criadas
+	  - Número de pontos de verificação executados
+	  - Quantidade de erros HTTP 5xx
+
+Gauge
+	Valores não aditivos. Ou seja, a diferença do valor entre uma coleta e outra é irrelevante.
+	  - Quanto de cpu está em uso agora?
+	  - Quanto de memória está em uso?
+
+UpDownCounter
+	Contador decrementável. Ele pode subir ou descer.
+	  - Quantas pessoas estão logadas agora?
+	  - Quantos requests estão sendo processados?
+	  - Quantas conexões estão abertas com o banco de dados?
+	  - Quantos jobs estão na fila?
+
+Histograma
+	Valores que podem ser estatísticamente interessantes
+	  - Quanto tempo o banco demorou para fazer uma busca?
+	  - Quanto tempo uma requisição levou?
+	  - Quanto tempo uma ação específica demorou?
