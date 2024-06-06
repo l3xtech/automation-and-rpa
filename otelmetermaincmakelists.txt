@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.10)
+
+project(meu-app-dahora)
+
+find_package(OpenTelemetry REQUIRED)
+
+add_executable(meu-app-dahora main.cpp)
+
+target_link_libraries(meu-app-dahora OpenTelemetry::sdk-metrics)
+
