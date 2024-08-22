@@ -17,4 +17,4 @@ def make_c(days: int):
         return days * make_c(days-jump)
 
 for i in range(20):
-    make_c(50)
+    make_c(110)
