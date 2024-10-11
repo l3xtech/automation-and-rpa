@@ -14,4 +14,4 @@ def make_c(days: int):
 
         return days * make_c(days-1)
 
-make_c(120)
+make_c(70)
