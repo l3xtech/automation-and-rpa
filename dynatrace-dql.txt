@@ -1,0 +1,6 @@
+fetch metrics
+| filter metric.key == "KafkaRequest"
+| filter contains(service.instance.id, "core00")
+| summarize total = sum(value), by: {bucket: timeframe(1d)} 
+| sort bucket asc 
+| fields bucket, total
