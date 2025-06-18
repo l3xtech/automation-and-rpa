@@ -4,3 +4,10 @@ fetch metrics
 | summarize total = sum(value), by: {bucket: timeframe(1d)} 
 | sort bucket asc 
 | fields bucket, total
+
+  error
+
+fetch dt.entity.service
+| filter contains(service.instance.id, "core 00")
+| timeseries requests = sum(KafkaRequest), by:{bucket: timeframe(1d)}
+| sort bucket asc
