@@ -1,21 +1,9 @@
-fetch metrics
-| filter metric.key == "KafkaRequest"
-| filter contains(service.instance.id, "core00")
-| summarize total = sum(value), by: {bucket: timeframe(1d)} 
-| sort bucket asc 
-| fields bucket, total
-
-  error
-
-fetch dt.entity.service
-| filter contains(service.instance.id, "core 00")
-| timeseries requests = sum(KafkaRequest), by:{bucket: timeframe(1d)}
-| sort bucket asc
-
-  error
+### Somatória dividida por core 1 2 e 3
 
 timeseries { 
   sum(KafkaRequest), 
   value.total = sum(KafkaRequest, scalar: true)
-}, filter: matchesPhrase(entity.name, "core00")
+}, filter: matchesPhrase(service.instance.id, "core0")
 | sort value.total desc
+
+  sucess
