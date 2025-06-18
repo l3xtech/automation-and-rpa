@@ -11,3 +11,11 @@ fetch dt.entity.service
 | filter contains(service.instance.id, "core 00")
 | timeseries requests = sum(KafkaRequest), by:{bucket: timeframe(1d)}
 | sort bucket asc
+
+  error
+
+timeseries { 
+  sum(KafkaRequest), 
+  value.total = sum(KafkaRequest, scalar: true)
+}, filter: matchesPhrase(entity.name, "core00")
+| sort value.total desc
