@@ -30,3 +30,11 @@ timeseries {
   sum(KafkaRequest),
   by: {size}
 }
+
+error
+
+timeseries {
+  sum(KafkaRequest),
+  value.total = sum(KafkaRequest, scalar: true)
+}, filter: matchesPhrase(service.instance.id, "core0-small") or matchesPhrase(service.instance.id, "core0-medium") or matchesPhrase(service.instance.id, "core0-huge")
+| sort value.total desc
