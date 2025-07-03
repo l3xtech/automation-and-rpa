@@ -7,3 +7,16 @@ timeseries {
 | sort value.total desc
 
   sucess
+
+
+  timeseries {
+  sum(KafkaRequest),
+  by: {service.instance.id, size}
+}, filter: (
+  matchesPhrase(service.instance.id, "core0") and
+  size in ("huge", "medium", "small")
+)
+| summarize {
+  sum(KafkaRequest),
+  by: {size}
+}
