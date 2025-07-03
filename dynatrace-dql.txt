@@ -9,12 +9,22 @@ timeseries {
   sucess
 
 
-  timeseries {
+timeseries {
   sum(KafkaRequest),
-  by: {service.instance.id, size}
+  by: {service.instance.id}
 }, filter: (
-  matchesPhrase(service.instance.id, "core0") and
-  size in ("huge", "medium", "small")
+  matchesPhrase(service.instance.id, "core0") and 
+  (
+    matchesPhrase(service.instance.id, "huge") or 
+    matchesPhrase(service.instance.id, "medium") or 
+    matchesPhrase(service.instance.id, "small")
+  )
+)
+| fieldsAdd size = case(
+  contains(service.instance.id, "huge"), "Huge",
+  contains(service.instance.id, "medium"), "Medium",
+  contains(service.instance.id, "small"), "Small",
+  "Unknown"
 )
 | summarize {
   sum(KafkaRequest),
