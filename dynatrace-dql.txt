@@ -100,3 +100,15 @@ filter: (service.instance.id == "core0-small")
 |fieldsadd: (service.instance.id == "core-huge")
 )
 | sort -value.total
+
+
+
+
+
+
+timeseries {
+  sum(KafkaRequest),
+  value.total = sum(KafkaRequest, scalar: true)
+},
+filter: (service.instance.id == "core0-small") and (service.instance.id == "core0-medium") and (service.instance.id == "core-huge")
+| sort -value.total
