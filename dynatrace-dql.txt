@@ -77,3 +77,14 @@ filter: (
   service.instance.id == "core-huge"
 )
 | sort -value.total
+
+
+
+fetch metrics
+| filter metric == "kafka.request.count"
+| summarize {
+    total_daily = sum(value),
+    global_avg = avg(value)
+  }, by: {bin(timestamp, 1d)}
+| sort global_avg desc
+| fieldsAdd value.A = global_avg
