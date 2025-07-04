@@ -132,3 +132,20 @@ filter : (service.instance.id == "core0")
 |fieldsadd (service.intance.id == core0-medium)
 |fieldsadd (service.intance.id == core0-huge)
 | sort -value.total
+
+
+
+
+
+
+error
+
+
+
+
+timeseries {
+  sum(KafkaRequest),
+  by: {service.instance.id}
+},
+filter: service.instance.id in ("core0-small", "core0-medium", "core0-huge")
+| sort service.instance.id asc
