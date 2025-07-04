@@ -112,3 +112,23 @@ timeseries {
 },
 filter: (service.instance.id == "core0-small") and (service.instance.id == "core0-medium") and (service.instance.id == "core-huge")
 | sort -value.total
+
+
+
+error
+
+
+
+
+
+
+
+timeseries {
+  sum(KafkaRequest),
+  value.total = sum(KafkaRequest, scalar: true)
+},
+filter : (service.instance.id == "core0")
+|fieldsadd (service.intance.id == core0-small)
+|fieldsadd (service.intance.id == core0-medium)
+|fieldsadd (service.intance.id == core0-huge)
+| sort -value.total
