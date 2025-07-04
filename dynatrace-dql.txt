@@ -61,3 +61,19 @@ filter: matchesPhrase(service.instance.id, "core0-small")
   OR matchesPhrase(service.instance.id, "core0-medium")
   OR matchesPhrase(service.instance.id, "core-huge")
 | sort value.total desc
+
+
+error
+
+
+
+timeseries {
+  sum(KafkaRequest),
+  value.total = sum(KafkaRequest, scalar: true)
+},
+filter: (
+  service.instance.id == "core0-small" OR
+  service.instance.id == "core0-medium" OR
+  service.instance.id == "core-huge"
+)
+| sort -value.total
