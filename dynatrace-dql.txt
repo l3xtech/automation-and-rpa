@@ -149,3 +149,21 @@ timeseries {
 },
 filter: service.instance.id in ("core0-small", "core0-medium", "core0-huge")
 | sort service.instance.id asc
+
+
+
+
+
+error
+
+
+
+
+
+
+
+timeseries { 
+  sum(KafkaRequest), 
+  value.total = sum(KafkaRequest)
+}, filter: matchesPhrase(service.instance.id, "core0-small") or matchesPhrase(service.instance.id, "core0-medium") or matchesPhrase(service.instance.id, "core0-huge")
+| sort value.total desc
