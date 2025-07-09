@@ -26,7 +26,7 @@ filter:
 
 
 
-
+less
 
 
 
@@ -39,3 +39,20 @@ fetch kafka_request
          matchesPhrase(service.instance.id, "core0-huge")
 | summarize count = count(), by:{service.instance.id}
 | sort service.instance.id
+
+
+
+error
+
+
+
+timeseries
+  tamanhos.core = sum(KafkaRequest),
+  by: {service.instance.id}
+|filter matchesPhrase(service.instance.id, "core0-small") OR
+         matchesPhrase(service.instance.id, "core0-medium") OR
+         matchesPhrase(service.instance.id, "core0-huge")
+| summarize count = count(), by:{service.instance.id}
+| sort service.instance.id (edited)
+[15:59]
+
