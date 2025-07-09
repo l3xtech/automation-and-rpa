@@ -56,3 +56,59 @@ timeseries
 | sort service.instance.id (edited)
 [15:59]
 
+
+
+
+same
+
+
+
+
+
+
+// Exemplo de lista de service.instance.id
+const serviceInstanceIds = [
+  "core0-small",
+  "core0-medium",
+  "core0-huge",
+];
+
+// Função principal
+function summarizePods(ids) {
+  const counts = {};     // Objeto para contar strings iguais
+  const pods = {};       // Objeto para mapear string => podN
+  let podNumber = 1;     // Contador de pods sequenciais
+
+  // Contar quantidades de cada string
+  ids.forEach(id => {
+    counts[id] = (counts[id] || 0) + 1;
+  });
+
+  // Criar lista final com nomes de pod e quantidade
+  const result = [];
+
+  Object.entries(counts).forEach(([id, count]) => {
+    const podName = pod ${podNumber} (${count});
+    pods[id] = podName;
+    podNumber++;
+  });
+
+  // Construir resultado
+  ids.forEach(id => {
+    result.push({
+      original: id,
+      pod: pods[id]
+    });
+  });
+
+  return result;
+}
+
+// Executando a função
+const summarized = summarizePods(serviceInstanceIds);
+
+// Exibindo o resultado
+console.log("Pods resumidos:");
+summarized.forEach(entry => {
+  console.log(${entry.pod}: ${entry.original});
+});
