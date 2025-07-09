@@ -9,41 +9,19 @@ timeseries {
   sucess
 
 
-timeseries {
-  sum(KafkaRequest),
-  by: {service.instance.id}
-}, filter: (
-  matchesPhrase(service.instance.id, "core0") and 
-  (
-    matchesPhrase(service.instance.id, "huge") or 
-    matchesPhrase(service.instance.id, "medium") or 
-    matchesPhrase(service.instance.id, "small")
-  )
-)
-| fieldsAdd size = case(
-  contains(service.instance.id, "huge"), "Huge",
-  contains(service.instance.id, "medium"), "Medium",
-  contains(service.instance.id, "small"), "Small",
-  "Unknown"
-)
-| summarize {
-  sum(KafkaRequest),
-  by: {size}
-}
-
-error
-
-timeseries {
-  sum(KafkaRequest),
-  value.total = sum(KafkaRequest, scalar: true)
-}, filter: matchesPhrase(service.instance.id, "core0-small") or matchesPhrase(service.instance.id, "core0-medium") or matchesPhrase(service.instance.id, "core0-huge")
-| sort value.total desc
-
-wrong
 
 
-timeseries  
-  sum(KafkaRequest)
+
+
+timeseries
+  tamanhos.core = avg(KafkaRequest),
+  by: {service.instance.id},
+filter:
+    matchesPhrase(service.instance.id, "core0-small") OR
+    matchesPhrase(service.instance.id, "core0-medium") OR
+    matchesPhrase(service.instance.id, "core0-huge")
+|sort tamanhos.core
+| summarize count = count (), by:{service.instance.id}
 
 
 
@@ -53,117 +31,11 @@ timeseries
 
 
 
-  timeseries {
-  sum(KafkaRequest),
-  value.total = sum(KafkaRequest, scalar: true)
-},
-filter: matchesPhrase(service.instance.id, "core0-small")
-  OR matchesPhrase(service.instance.id, "core0-medium")
-  OR matchesPhrase(service.instance.id, "core-huge")
-| sort value.total desc
 
 
-error
-
-
-
-timeseries {
-  sum(KafkaRequest),
-  value.total = sum(KafkaRequest, scalar: true)
-},
-filter: (
-  service.instance.id == "core0-small" OR
-  service.instance.id == "core0-medium" OR
-  service.instance.id == "core-huge"
-)
-| sort -value.total
-
-
-
-fetch metrics
-| filter metric == "kafka.request.count"
-| summarize {
-    total_daily = sum(value),
-    global_avg = avg(value)
-  }, by: {bin(timestamp, 1d)}
-| sort global_avg desc
-| fieldsAdd value.A = global_avg
-
-
-
-timeseries {
-  sum(KafkaRequest),
-  value.total = sum(KafkaRequest, scalar: true)
-},
-filter: (service.instance.id == "core0-small")
-|fieldsadd: (service.instance.id == "core0-medium")
-|fieldsadd: (service.instance.id == "core-huge")
-)
-| sort -value.total
-
-
-
-
-
-
-timeseries {
-  sum(KafkaRequest),
-  value.total = sum(KafkaRequest, scalar: true)
-},
-filter: (service.instance.id == "core0-small") and (service.instance.id == "core0-medium") and (service.instance.id == "core-huge")
-| sort -value.total
-
-
-
-error
-
-
-
-
-
-
-
-timeseries {
-  sum(KafkaRequest),
-  value.total = sum(KafkaRequest, scalar: true)
-},
-filter : (service.instance.id == "core0")
-|fieldsadd (service.intance.id == core0-small)
-|fieldsadd (service.intance.id == core0-medium)
-|fieldsadd (service.intance.id == core0-huge)
-| sort -value.total
-
-
-
-
-
-
-error
-
-
-
-
-timeseries {
-  sum(KafkaRequest),
-  by: {service.instance.id}
-},
-filter: service.instance.id in ("core0-small", "core0-medium", "core0-huge")
-| sort service.instance.id asc
-
-
-
-
-
-error
-
-
-
-
-
-
-
-timeseries { 
-  sum(KafkaRequest), 
-  value.total = sum(KafkaRequest)
-}, filter: matchesPhrase(service.instance.id, "core0-small") or matchesPhrase(service.instance.id, "core0-medium") or matchesPhrase(service.instance.id, "core0-huge")
-| sort value.total desc
+fetch kafka_request
+| filter matchesPhrase(service.instance.id, "core0-small") OR
+         matchesPhrase(service.instance.id, "core0-medium") OR
+         matchesPhrase(service.instance.id, "core0-huge")
+| summarize count = count(), by:{service.instance.id}
+| sort service.instance.id
