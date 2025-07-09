@@ -111,4 +111,49 @@ const summarized = summarizePods(serviceInstanceIds);
 console.log("Pods resumidos:");
 summarized.forEach(entry => {
   console.log(${entry.pod}: ${entry.original});
+
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+timeseries
+  avgKafkaRequest = avg(KafkaRequest),
+  by: {service.instance.id}
+| filter matchesPhrase(service.instance.id, "core0-small") OR
+         matchesPhrase(service.instance.id, "core0-medium") OR
+         matchesPhrase(service.instance.id, "core0-huge")
+| summarize
+    avgKafkaRequest = avg(avgKafkaRequest),
+    count = count(),
+    by: {service.instance.id}
+| fieldsAdd pod = "pod"
+| sort avgKafkaRequest desc
