@@ -190,3 +190,17 @@ filter: true
 
 
 
+
+
+
+
+
+timeseries {
+  sum(KafkaRequest)
+},
+split by service.instance.id
+| sort value.total desc
+
+
+
+
