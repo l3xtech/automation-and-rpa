@@ -157,3 +157,36 @@ timeseries
     by: {service.instance.id}
 | fieldsAdd pod = "pod"
 | sort avgKafkaRequest desc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+timeseries {
+  sum(KafkaRequest)
+},
+filter: true
+| summarize KafkaRequestsTotal = sum(KafkaRequest) by service.instance.id
+| sort KafkaRequestsTotal desc
+
+
+
+
